@@ -15,3 +15,17 @@ and verified against live responses.
 To refresh the vendored schemas, download the `openapi/*.yml` files from
 upstream `main`, update the commit hash above, then regenerate the
 subpackages (`bash tools/regenerate.sh`) and review the diff.
+
+## Known upstream schema gaps
+
+Verified against the live APIs (2026-08-15); worth reporting upstream:
+
+- `climate.yml` declares only the plain daily variable names, but with
+  *several* `models=` the API answers with per-model suffixed keys
+  (`temperature_2m_max_MRI_AGCM3_2_S`, ...) — no `additionalProperties`
+  is declared, so those keys are dropped by generated models. Workaround:
+  one model per request.
+- `flood.yml` likewise declares no `additionalProperties` for the
+  `ensemble=true` member keys (`river_discharge_member01`, ...);
+  the precomputed statistics variables are declared and work.
+
