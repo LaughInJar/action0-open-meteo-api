@@ -58,14 +58,14 @@ urllib3 = [
 
 [[package]]
 name = "action0-client-openapi"
-version = "0.1.1"
+version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "action0-client" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/64/0b/74a7e3463448b7fd35d19321a1887e291af1019c828450e60278ff20f02d/action0_client_openapi-0.1.1.tar.gz", hash = "sha256:21f283b5f14519ae9e699cf61fc57f772e3ac2e1a0707bf5e5a8e30dd7d21e58", size = 169325, upload-time = "2026-08-15T14:25:27.188Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6c/c4/5e370a04c7ba3dbb9d2d32eb1137ce03fe87942fb182c284d0dea6076841/action0_client_openapi-0.1.2.tar.gz", hash = "sha256:f84b8abea266dfd6037979c99eb40b5f9138bff4c4eaeca46bbde43d69e5448a", size = 178103, upload-time = "2026-08-15T15:05:21.333Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d0/31/f6671b876d16cba58ef661b7cceb57d887bde49eea11a16b6b9e95c2f70b/action0_client_openapi-0.1.1-py3-none-any.whl", hash = "sha256:172c560e76443813254277441a2ec2cf399256b699d8fa67077f3240ae8420bb", size = 53484, upload-time = "2026-08-15T14:25:25.502Z" },
+    { url = "https://files.pythonhosted.org/packages/3d/ee/2af199376ca742e4ee527e3196d2a07882daadf2d2d02ae6fcfad292e3c4/action0_client_openapi-0.1.2-py3-none-any.whl", hash = "sha256:30a0890999cb9b2e9f91491d9a20013bf0a04f7fefc44424589ae32c7b7e662d", size = 57602, upload-time = "2026-08-15T15:05:20.037Z" },
 ]
 
 [package.optional-dependencies]
@@ -143,7 +143,7 @@ provides-extras = ["aiohttp", "all", "httpx", "requests", "twisted", "urllib3"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "action0-client-openapi", extras = ["yaml"], specifier = ">=0.1.1" },
+    { name = "action0-client-openapi", extras = ["yaml"], specifier = ">=0.1.2" },
     { name = "aiohttp", specifier = ">=3.9" },
     { name = "httpx", specifier = ">=0.27" },
     { name = "mypy", specifier = ">=2.3.0" },

@@ -65,7 +65,7 @@ Issues = "https://github.com/LaughInJar/action0-open-meteo-api/issues"
 dev = [
     # the generator, for tools/regenerate.sh (the yaml extra reads the
     # vendored .yml schemas)
-    "action0-client-openapi[yaml]>=0.1.1",
+    "action0-client-openapi[yaml]>=0.1.2",
     # all optional backend libraries are dev dependencies: the examples and
     # the type checkers need them
     "aiohttp>=3.9",

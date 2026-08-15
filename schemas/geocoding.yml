@@ -82,12 +82,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                  reason:
-                    type: string
+                $ref: '#/components/schemas/ErrorResponse'
   /v1/get:
     get:
       operationId: getLocation
@@ -119,14 +114,19 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: boolean
-                  reason:
-                    type: string
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      description: The error answer of a rejected request.
+      properties:
+        error:
+          type: boolean
+          description: Always true.
+        reason:
+          type: string
+          description: What was wrong with the request.
     Location:
       type: object
       description: One geocoded location.

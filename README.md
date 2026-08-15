@@ -58,7 +58,9 @@ URL:
 Enumerable request parameters are generated enums (IDE completion knows
 the legal weather variables), dates are `datetime.date`, and every JSON
 answer parses into plain typed dataclasses — mypy strict, pyright and ty
-pass on the generated code. The Open-Meteo APIs are free for
+pass on the generated code. Even the error path is typed: Open-Meteo's
+documented 400 answer raises a generated `BadRequestError` carrying the
+parsed `reason`. The Open-Meteo APIs are free for
 non-commercial use without an API key ([terms](https://open-meteo.com/en/terms));
 commercial subscriptions pass their key as the operations' `apikey`
 field.
