@@ -1,0 +1,203 @@
+# This schema is NOT from the open-meteo/open-meteo repository: upstream
+# publishes no OpenAPI document for the Geocoding API. It was written for
+# this project against https://open-meteo.com/en/docs/geocoding-api and
+# verified against live responses of geocoding-api.open-meteo.com.
+openapi: '3.1.0'
+info:
+  title: Open-Meteo Geocoding API
+  description: >-
+    Search for locations by name (in any language) and resolve them to
+    coordinates, or look a location up by its id. The ids are GeoNames ids.
+  version: '1.0'
+  contact:
+    name: Open-Meteo
+    url: https://open-meteo.com
+    email: info@open-meteo.com
+  license:
+    name: Attribution 4.0 International (CC BY 4.0)
+    url: https://creativecommons.org/licenses/by/4.0/
+  termsOfService: https://open-meteo.com/en/features#terms
+servers:
+  - url: https://geocoding-api.open-meteo.com
+  - url: https://customer-geocoding-api.open-meteo.com
+paths:
+  /v1/search:
+    get:
+      operationId: searchLocations
+      tags:
+        - Geocoding API
+      summary: Search for locations by name
+      description: >-
+        Search for locations by name or postal code. Matching is fuzzy for
+        names of three characters or more; the result is ranked by
+        population. When nothing matches, the response carries no results.
+      parameters:
+        - name: name
+          in: query
+          required: true
+          description: >-
+            The location name to search for. Two characters match exactly,
+            three or more match fuzzily; postal codes work too.
+          schema:
+            type: string
+        - name: count
+          in: query
+          description: The number of results to return, up to 100.
+          schema:
+            type: integer
+            default: 10
+        - name: language
+          in: query
+          description: >-
+            A lowercase two-letter language code; names are returned
+            translated when a translation exists.
+          schema:
+            type: string
+            default: en
+        - name: apikey
+          in: query
+          description: Only required for commercial subscriptions.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    description: >-
+                      The matching locations, best match first. Absent when
+                      nothing matched.
+                    items:
+                      $ref: '#/components/schemas/Location'
+                  generationtime_ms:
+                    type: number
+                    format: float
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  reason:
+                    type: string
+  /v1/get:
+    get:
+      operationId: getLocation
+      tags:
+        - Geocoding API
+      summary: Look a location up by id
+      description: Return a single location by its (GeoNames) id.
+      parameters:
+        - name: id
+          in: query
+          required: true
+          description: The location id, as returned by the search.
+          schema:
+            type: integer
+        - name: apikey
+          in: query
+          description: Only required for commercial subscriptions.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                  reason:
+                    type: string
+components:
+  schemas:
+    Location:
+      type: object
+      description: One geocoded location.
+      required:
+        - id
+        - name
+        - latitude
+        - longitude
+      properties:
+        id:
+          type: integer
+          description: The location's GeoNames id, usable with /v1/get.
+        name:
+          type: string
+          description: The location name, translated when possible.
+        latitude:
+          type: number
+          format: float
+          description: WGS84 latitude.
+        longitude:
+          type: number
+          format: float
+          description: WGS84 longitude.
+        elevation:
+          type: number
+          format: float
+          description: Elevation above mean sea level, in metres.
+        feature_code:
+          type: string
+          description: The GeoNames feature code (PPLC is a capital, ...).
+        country_code:
+          type: string
+          description: The ISO-3166-1 alpha-2 country code.
+        country:
+          type: string
+          description: The country name.
+        country_id:
+          type: integer
+          description: The country's GeoNames id.
+        population:
+          type: integer
+          description: The number of inhabitants.
+        postcodes:
+          type: array
+          description: The postal codes attached to the location.
+          items:
+            type: string
+        timezone:
+          type: string
+          description: The IANA time zone of the location.
+        admin1:
+          type: string
+          description: The first-level administrative area (state, ...).
+        admin2:
+          type: string
+          description: The second-level administrative area (district, ...).
+        admin3:
+          type: string
+          description: The third-level administrative area.
+        admin4:
+          type: string
+          description: The fourth-level administrative area.
+        admin1_id:
+          type: integer
+          description: The GeoNames id of the first-level area.
+        admin2_id:
+          type: integer
+          description: The GeoNames id of the second-level area.
+        admin3_id:
+          type: integer
+          description: The GeoNames id of the third-level area.
+        admin4_id:
+          type: integer
+          description: The GeoNames id of the fourth-level area.
