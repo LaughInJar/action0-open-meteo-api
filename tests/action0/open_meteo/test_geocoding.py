@@ -58,6 +58,30 @@ class SearchLocationsTestCase(unittest.TestCase):
         self.assertIsNone(found.results)
 
 
+class GeocodingErrorTestCase(unittest.TestCase):
+    """
+    tests for the shared 400 exception of both geocoding operations
+    """
+
+    def test_both_operations_share_bad_request_error(self) -> None:
+        """
+        Test that search and by-id lookup raise the same typed 400
+        exception (the schema $refs one shared ErrorResponse).
+        """
+        from action0.open_meteo.geocoding import BadRequestError
+
+        body = '{"error": true, "reason": "Parameter count must be between 1 and 100"}'
+        backend = StubBackend(Response(400, body=body), Response(400, body=body))
+        client = GeocodingClient(backend)
+        with self.assertRaises(BadRequestError) as caught:
+            client.send(SearchLocations(name="Vienna", count=1000))
+        self.assertEqual(
+            caught.exception.error.reason, "Parameter count must be between 1 and 100"
+        )
+        with self.assertRaises(BadRequestError):
+            client.send(GetLocation(id=0))
+
+
 class GetLocationTestCase(unittest.TestCase):
     """
     tests for the by-id lookup

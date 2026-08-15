@@ -59,7 +59,20 @@ async with AsyncHttpxBackend() as backend:
     forecast = await weather.send(GetV1Forecast(latitude="48.21", longitude="16.37"))
 ```
 
-Non-2xx responses raise `action0.client.APIError` with request and
+A rejected request raises a *typed* error: Open-Meteo's documented 400
+answer parses into the generated `BadRequestError` (a subclass of
+`action0.client.APIError`, so broad handlers keep working):
+
+```python
+from action0.open_meteo.forecast import BadRequestError
+
+try:
+    forecast = weather.send(GetV1Forecast(latitude="91", longitude="16.37"))
+except BadRequestError as error:
+    print(error.error.reason)  # "Latitude must be in range of -90 to 90"
+```
+
+Any other non-2xx status raises the plain `APIError` with request and
 response attached; transport problems arrive as `TransportError` /
 `TimeoutError` — see the
 [action0-client error guide](https://laughinjar.github.io/action0-client/usage/errors.html).
